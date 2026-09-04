@@ -214,6 +214,40 @@ a{color:var(--accent);}
 .modal-content h3{font-size:.95rem;margin-top:1.4rem;color:var(--accent);}
 .modal-close{position:absolute;top:.9rem;right:.9rem;background:none;border:none;color:var(--ink-soft);font-size:1.1rem;cursor:pointer;}
 
+/* ---------- Tiroir « Programme complet » ---------- */
+.curriculum-btn{display:flex;align-items:center;gap:.4rem;padding:.4rem .8rem;}
+.drawer-root{position:fixed;inset:0;z-index:55;display:flex;justify-content:flex-end;}
+.drawer-root[hidden]{display:none;}
+.drawer-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);}
+.drawer-panel{
+  position:relative;width:400px;max-width:92vw;height:100%;background:var(--bg-elevated);
+  border-left:1px solid var(--border);overflow-y:auto;padding:1.6rem;
+  animation:drawer-in .18s ease-out;
+}
+@keyframes drawer-in{from{transform:translateX(24px);opacity:.4;}to{transform:translateX(0);opacity:1;}}
+.drawer-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.2rem;}
+.drawer-header h2{font-size:1.1rem;margin-bottom:.2rem;}
+.drawer-summary{font-family:var(--mono);font-size:.8rem;color:var(--accent);margin:0;}
+.drawer-next{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1.4rem;}
+.drawer-next-label{font-size:.78rem;color:var(--ink-soft);margin-bottom:.5rem;text-transform:none;}
+.drawer-next .btn{width:100%;text-align:left;}
+.drawer-alldone{color:var(--success);font-weight:600;}
+.drawer-module{margin-bottom:1.3rem;}
+.drawer-module-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem;}
+.drawer-module-head h3{font-size:.88rem;color:var(--ink-soft);margin:0;font-weight:600;}
+.drawer-module-count{font-family:var(--mono);font-size:.76rem;color:var(--ink-soft);}
+.drawer-chapter-list{list-style:none;margin:0;padding:0;}
+.drawer-chapter{display:flex;align-items:center;gap:.55rem;padding:.5rem .4rem;border-radius:7px;cursor:pointer;font-size:.88rem;}
+.drawer-chapter:hover{background:var(--bg-card);}
+.drawer-chapter.locked{color:var(--ink-soft);cursor:not-allowed;}
+.drawer-chapter.done{color:var(--success);}
+.drawer-chapter-icon{font-family:var(--mono);width:1.2em;text-align:center;}
+.drawer-chapter-title{flex:1;}
+.drawer-chapter-meta{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);}
+.drawer-todo{border-top:1px solid var(--border);margin-top:1.2rem;padding-top:1.2rem;}
+.drawer-todo h4{font-size:.85rem;color:var(--ink-soft);margin-bottom:.5rem;}
+.drawer-todo-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.3rem;font-size:.85rem;color:var(--ink-soft);}
+
 /* ---------- Toast ---------- */
 .toast{
   position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(10px);
