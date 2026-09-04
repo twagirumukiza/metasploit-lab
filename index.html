@@ -17,6 +17,9 @@
   </div>
 
   <div class="topbar-controls">
+    <button id="curriculumToggle" class="ctrl-btn curriculum-btn" title="Programme">
+      <span aria-hidden="true">☰</span> <span data-i18n="topbar.curriculum">Programme</span>
+    </button>
     <div class="ctrl-group" role="group" aria-label="Taille du texte">
       <button id="fontDown" class="ctrl-btn" title="Réduire le texte">A-</button>
       <button id="fontUp" class="ctrl-btn" title="Agrandir le texte">A+</button>
@@ -60,6 +63,20 @@
     <button class="modal-close" data-close-modal aria-label="Fermer">✕</button>
     <div id="modalContent" class="modal-content"></div>
   </div>
+</div>
+
+<div id="curriculumDrawer" class="drawer-root" hidden>
+  <div class="drawer-backdrop" data-close-drawer></div>
+  <aside class="drawer-panel" role="dialog" aria-modal="true" aria-label="Programme">
+    <div class="drawer-header">
+      <div>
+        <h2 data-i18n="drawer.title">Programme complet</h2>
+        <p id="drawerSummary" class="drawer-summary"></p>
+      </div>
+      <button class="modal-close" data-close-drawer aria-label="Fermer">✕</button>
+    </div>
+    <div id="drawerContent" class="drawer-content"></div>
+  </aside>
 </div>
 
 <div id="toast" class="toast" hidden></div>
