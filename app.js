@@ -116,6 +116,74 @@ document.querySelectorAll("footer [data-modal]").forEach((el) => {
   el.addEventListener("click", (e) => { e.preventDefault(); openModal(el.getAttribute("data-modal")); });
 });
 
+/* ---------- Tiroir « Programme complet » (accessible depuis toute page) ---------- */
+function renderDrawerContent() {
+  const total = FLAT_CHAPTERS.length;
+  const done = FLAT_CHAPTERS.filter((f) => isPassed(f.chapter.id)).length;
+  document.getElementById("drawerSummary").textContent = `${done} / ${total} ${t("drawer.summaryDone")}`;
+
+  const nextEntry = FLAT_CHAPTERS.find((f) => !isPassed(f.chapter.id) && isUnlocked(f.chapter.id));
+  const todoEntries = FLAT_CHAPTERS.filter((f) => !isPassed(f.chapter.id));
+
+  const nextHtml = nextEntry ? `
+    <div class="drawer-next">
+      <p class="drawer-next-label">${esc(t("drawer.next"))}</p>
+      <button class="btn btn-primary" data-go-chapter="${nextEntry.chapter.id}">
+        ${esc(nextEntry.moduleTitle[state.lang])} — ${esc(nextEntry.chapter.title[state.lang])} ▸
+      </button>
+    </div>` : `<p class="drawer-alldone">${esc(t("drawer.allDone"))}</p>`;
+
+  const modulesHtml = COURSE.modules.map((mod) => {
+    const rows = mod.chapters.map((chap) => {
+      const unlocked = isUnlocked(chap.id);
+      const passed = isPassed(chap.id);
+      const status = passed ? "done" : unlocked ? "open" : "locked";
+      const icon = passed ? "✔" : unlocked ? "▸" : "🔒";
+      const scoreNote = state.progress[chap.id] && state.progress[chap.id].attempts
+        ? `<span class="drawer-chapter-meta">${state.progress[chap.id].lastScore}/${chap.exam.questions.length}</span>` : "";
+      return `
+        <li class="drawer-chapter ${status}" data-go-chapter="${chap.id}">
+          <span class="drawer-chapter-icon">${icon}</span>
+          <span class="drawer-chapter-title">${esc(chap.title[state.lang])}</span>
+          ${scoreNote}
+        </li>`;
+    }).join("");
+    const modDone = mod.chapters.filter((c) => isPassed(c.id)).length;
+    return `
+      <div class="drawer-module">
+        <div class="drawer-module-head">
+          <h3>${esc(mod.title[state.lang])}</h3>
+          <span class="drawer-module-count">${modDone}/${mod.chapters.length}</span>
+        </div>
+        <ul class="drawer-chapter-list">${rows}</ul>
+      </div>`;
+  }).join("");
+
+  const todoHtml = todoEntries.length ? `
+    <div class="drawer-todo">
+      <h4>${esc(t("drawer.todoTitle"))}</h4>
+      <ul class="drawer-todo-list">
+        ${todoEntries.map((f) => `<li>${isUnlocked(f.chapter.id) ? "▸" : "🔒"} ${esc(f.chapter.title[state.lang])}</li>`).join("")}
+      </ul>
+    </div>` : `<p class="drawer-alldone">${esc(t("drawer.todoNone"))}</p>`;
+
+  document.getElementById("drawerContent").innerHTML = nextHtml + modulesHtml + todoHtml;
+
+  document.querySelectorAll("#curriculumDrawer [data-go-chapter]").forEach((el) => {
+    el.addEventListener("click", () => {
+      const id = el.getAttribute("data-go-chapter");
+      if (!isUnlocked(id)) { showToast(t("chapter.locked")); return; }
+      closeDrawer();
+      go({ type: "chapter", chapterId: id, mode: "theory" });
+    });
+  });
+}
+function openDrawer() { renderDrawerContent(); document.getElementById("curriculumDrawer").hidden = false; }
+function closeDrawer() { document.getElementById("curriculumDrawer").hidden = true; }
+document.getElementById("curriculumToggle").addEventListener("click", openDrawer);
+document.querySelectorAll("[data-close-drawer]").forEach((el) => el.addEventListener("click", closeDrawer));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+
 /* ---------- Rendu : pied de page progression ---------- */
 function renderFooterProgress() {
   const total = FLAT_CHAPTERS.length;
